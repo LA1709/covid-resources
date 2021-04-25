@@ -79,6 +79,25 @@ function getDateTimeDifference(timeStamp){
     return `${day}/${mon}/${y} at ${hrs}:${min}:${sec}`
 }
 
+function getSortedLeads(leadsJsonObject) {
+    var leadsMap = new Map(Object.entries(leadsJsonObject));
+    var leadsArray = Array.from(leadsMap);
+    leadsArray.sort(function(first, second) {
+        return second[1]["verified"] - first[1]["verified"];
+    });
+    leadsMap.clear();
+    leadsArray.forEach(item => {
+        leadsMap.set(item[0], item[1])
+    });
+
+    var sortedLeadsObject = {};
+    leadsMap.forEach(function(value, key) {
+        sortedLeadsObject[key+ " "] = value;
+    });
+
+    return sortedLeadsObject;
+}
+
 const Seeker = ({queries}) => {
     const [state, setState] = useState(undefined);
     const [categ, setCateg] = useState(undefined);
@@ -179,7 +198,7 @@ const Seeker = ({queries}) => {
                             <h3 style={styles.subheading}>{cat.toUpperCase()}</h3>
                             <List
                                 grid={{gutter: 16, xs: 2, sm: 3, md: 4, lg: 5}}
-                                dataSource={Object.entries(result[region][cat])}
+                                dataSource={Object.entries(getSortedLeads(result[region][cat]))}
                                 renderItem={item => (
                                 <List.Item>
                                     <Card key={item[0]}>
