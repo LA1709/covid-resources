@@ -126,7 +126,8 @@ const Seeker = ({queries}) => {
         </Link>
         <div style={styles.wrapper}>
             <p style={{marginBottom: '10px'}}>
-            <b>Please Note: </b>This is <b>Crowdsourced data</b> to fight COVID across India. The data is made available to public as is, and is being verified by our volunteers in realtime.<br />
+            <b>Please Note: </b>This is <b>Crowdsourced data</b> to fight COVID across India. The data is made available to public as is, and is being verified by our volunteers in realtime.
+            <b> However, </b>Everyone is running out of stock, capacity and resources so if you find numbers that are switched off/busy or not picking up, please move on to the next one.
             </p>
             <Form layout="inline">
                 {/* <Form.Item>

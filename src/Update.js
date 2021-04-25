@@ -4,7 +4,7 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { states } from './states';
 import { Link } from 'react-router-dom';
 import verified from './assets/verified.png';
-import { markVerified, exhausted } from './actions';
+import { markVerified, exhausted, wrongEntry } from './actions';
 const { Option } = Select;
 
 const styles= {
@@ -31,10 +31,10 @@ const styles= {
         marginRight: '2%',
         textAlign: 'center'
     },
-    u: {
-        width: '98%',
-        textAlign: 'center'
-    }
+    // u: {
+    //     width: '98%',
+    //     textAlign: 'center'
+    // }
 }
 
 const options = ['Oxygen', 'Remdesivir', 'Plasma', 'Beds', 'Other Medicines', 'Food', 'Tocilizumab'];
@@ -228,13 +228,13 @@ const Update = ({queries, unchecked, functions}) => {
                 {vst ? <div style={{marginBottom: '20px'}}>
                     Please use the following buttons to change the verification status.<br />
                     <b>Note:<br />
-                    If the user is not picking up or you are in doubt, DO NOT mark as not working, they may just be busy.
+                    If the user is not picking up or you are in doubt, DO NOT mark as not working and DO NOT mark as WRONG, they may just be busy.
                     </b>
                 </div> : <div>
                     Please click the following button to mark as verified. We request you to not give unverified data.
                 </div>}
                 <Row style={{width: '100%'}}>
-                    <Col style={vst?styles.v:styles.u}>
+                    <Col style={styles.v}>
                         <Button 
                             type="primary"
                             onClick={()=>markVerified(details, setDetails, [vst, vst?functions.v:functions.u])}
@@ -242,12 +242,19 @@ const Update = ({queries, unchecked, functions}) => {
                             Working
                         </Button>
                     </Col>
-                    {vst && <Col style={{width: '49%', textAlign: 'center'}}>
+                    {vst ? <Col style={{width: '49%', textAlign: 'center'}}>
                         <Button 
-                            type="danger"
+                            type="default"
                             onClick={()=>exhausted(details, setDetails, functions.v)}
                         >Not Working</Button>
-                    </Col>}
+                    </Col> : 
+                    <Col style={{width: '49%', textAlign: 'center'}}>
+                        <Button 
+                            type="danger"
+                            onClick={()=>wrongEntry(details, setDetails, functions.u)}
+                        >Wrong Number</Button>
+                    </Col>
+                    }
                 </Row>
             </Modal>
             <h1 style={styles.heading}>Help Providers</h1>

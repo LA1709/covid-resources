@@ -21,26 +21,26 @@ export const getUnverified = (update) => {
 export const addData = (arr) => {
     let result = {};
     arr.forEach(lead => {
-        if(lead['Status']&&lead['STATE']&&lead['Type of Help']&&lead.Phone){
-        const s = lead['Status'].toLowerCase();
-        const st = lead['STATE'].toLowerCase().replace(/\/|\./g, "_");
-        const cat = lead['Type of Help'].toLowerCase().replace(" ", "_");
-        if (!result[s]) result[s]={};
-        if (!result[s][st]) result[s][st]={};
-        if (!result[s][st][cat]) result[s][st][cat]={};
-        result[s][st][cat][lead.Phone.replace(/\/|\./g, "_")] = {
-            link: lead['Address/Link'],
-            area: lead['Area'],
-            city: lead['City'],
-            desc: lead['Comments'],
-            date: lead['Last Verified at Date'],
-            time: lead['Last Verified at Time'],
-            name: lead['Point of Contact'],
-            pincode: lead['Zip Code']
+        if(lead['Contact detail'] && lead['State']!="" && lead['State'].match("/")==null && lead['Contact detail'].match(/\d{10}/)){//&&lead['STATE']&&lead['Type of Help']&&lead.Phone){
+        // const s = lead['Status'].toLowerCase();
+        const st = lead['State'].toLowerCase()//.replace(/\/|\./g, "_");
+        const cat = 'oxygen'//lead['Type of Help'].toLowerCase().replace(" ", "_");
+        // if (!result[s]) result[s]={};
+        if (!result[st]) result[st]={};
+        if (!result[st][cat]) result[st][cat]={};
+        result[st][cat][lead['Contact detail'].replace(/\/|\./g, "_")] = {
+            // link: lead['Address/Link'],
+            // area: lead['Area'],
+            // city: lead['City'],
+            desc: lead['Location'],
+            name: lead['Name of the facility'],
+            // pincode: lead['Zip Code']
+            verified: 161922019060
         }
     }
     })
-    database.ref(`data/`).update(result).then(()=>console.log(result)).catch(e=>console.log(e));
+    // console.log(result)
+    database.ref(`data/temp`).update(result).then(()=>console.log(result)).catch(e=>console.log(e));
 }
 
 export const markVerified = (item, toggle, refresh) => {
@@ -49,6 +49,17 @@ export const markVerified = (item, toggle, refresh) => {
         database.ref(`unverified/${item[2]}/${item[3]}/${item[0]}`).set(null)
         .then(()=>{
             refresh[0]?getHelpers(refresh[1]):getUnverified(refresh[1]);
+            toggle(null);
+        })
+    });
+}
+
+export const wrongEntry = (item, toggle, refresh) => {
+    database.ref(`data/wrong/${item[2]}/${item[3]}/${item[0]}`)
+    .update({...item[1], verified: Date.now()}).then(()=>{
+        database.ref(`unverified/${item[2]}/${item[3]}/${item[0]}`).set(null)
+        .then(()=>{
+            getUnverified(refresh);
             toggle(null);
         })
     });
@@ -66,13 +77,13 @@ export const exhausted = (item, toggle, refresh) => {
 }
 
 export const addHelp = (data, report) => {
-    const dbRef = database.ref(`${data.date?'help':'unverified'}/${data.region}/${data.category}/${data.phone}`);
+    const dbRef = database.ref(`unverified/${data.region}/${data.category}/${data.phone}`);
     dbRef.once('value').then(ss => {
         if (ss.exists() && !data.date) report("707")
         else if (data.date) {
             let obj = {};
-            if(data.desc) obj = {name: data.name, desc: data.desc, verified: data.date.valueOf()};
-            else obj = {name: data.name, verified: data.date.valueOf()}
+            // if(data.desc) obj = {name: data.name, desc: data.desc, verified: data.date.valueOf()};
+            obj = {name: data.name, verified: data.date.valueOf()}
             dbRef.update(obj).then(s => report("200"))
         }
         else {
