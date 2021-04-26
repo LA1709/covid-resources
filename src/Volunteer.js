@@ -23,7 +23,7 @@ const styles= {
     }
 }
 
-const options = ['Oxygen', 'Remdesivir', 'Plasma', 'Beds', 'Other Medicines', 'Food', 'Tocilizumab'];
+const options = ['Oxygen', 'Remdesivir', 'Plasma', 'Beds', 'Other Medicines', 'Food', 'Tocilizumab', 'Ambulance'];
 
 const Volunteer = () => {
 

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Form, AutoComplete, Select, Button, Row, Col, Card, Alert, List, Modal, Input } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Form, AutoComplete, Select, Button, Row, Col, Card, Alert, List, Modal } from 'antd';
+import { ArrowLeftOutlined, SecurityScanFilled, PhoneFilled, LikeFilled } from '@ant-design/icons';
 import { states } from './states';
 import { Link } from 'react-router-dom';
 import verified from './assets/verified.png';
-import { markVerified, exhausted, wrongEntry } from './actions';
+import { markVerified, exhausted, logChange, wrongEntry } from './actions';
+import Login from './components/Login';
+
 const { Option } = Select;
 
 const styles= {
@@ -87,7 +89,7 @@ const Update = ({queries, unchecked, functions}) => {
     const [result, setResult] = useState({});
     const [details, setDetails] = useState(null);
     const [vst, setVst] = useState(false);
-    const [pass, setPass] = useState(false);
+    // const [pass, setPass] = useState(false);
 
     const ModalHeader = ({d}) => {
         return (
@@ -161,15 +163,11 @@ const Update = ({queries, unchecked, functions}) => {
         }
     }
 
-    const checkPasscode = p => {
-        if(p.target.value===process.env.REACT_APP_VERIFY_PASSWORD) setPass(true);
-    }
-
     useEffect(()=>sortResult(), [queries, unchecked, state, categ, vst]);
 
     return (
         <>
-        {pass? (
+        {localStorage.getItem('isLoggedIn') == 'true' ? (
         <div>
         <Link to="/">
         <Button type="primary" style={styles.backbtn} icon={<ArrowLeftOutlined />}>Back</Button>
@@ -237,7 +235,10 @@ const Update = ({queries, unchecked, functions}) => {
                     <Col style={styles.v}>
                         <Button 
                             type="primary"
-                            onClick={()=>markVerified(details, setDetails, [vst, vst?functions.v:functions.u])}
+                            onClick={()=>{
+                                markVerified(details, setDetails, [vst, vst?functions.v:functions.u]);
+                                logChange(details, "Reverified");
+                            }}
                         >
                             Working
                         </Button>
@@ -245,13 +246,19 @@ const Update = ({queries, unchecked, functions}) => {
                     {vst ? <Col style={{width: '49%', textAlign: 'center'}}>
                         <Button 
                             type="default"
-                            onClick={()=>exhausted(details, setDetails, functions.v)}
+                            onClick={()=>{
+                                exhausted(details, setDetails, functions.v);
+                                logChange(details, "Changed from working to exhausted");
+                            }}
                         >Not Working</Button>
                     </Col> : 
                     <Col style={{width: '49%', textAlign: 'center'}}>
                         <Button 
                             type="danger"
-                            onClick={()=>wrongEntry(details, setDetails, functions.u)}
+                            onClick={()=>{
+                                wrongEntry(details, setDetails, functions.u);
+                                logChange(details, "Marked as a wrong entry");
+                            }}
                         >Wrong Number</Button>
                     </Col>
                     }
@@ -299,19 +306,15 @@ const Update = ({queries, unchecked, functions}) => {
             </div>
         </div>
         ) : (
-            <div style={{margin: '10%'}}>
-                <p style={{margin: '5px', textAlign: 'center'}}>
-                Enter the password below if you are a registered verifier.<br />
-                Click <a target="blank" href="https://forms.gle/GznUPJ7s5ZwZSsreA">here</a> if you would like to register and generate a password.<br />
+            <div style={{marginLeft: '18%', marginTop: '10%'}}>
+                <p style={{fontSize: '1.5em'}}>
+                That you for joining us in this noble cause! We have a simple 3 step process to fight covid: <br /> <br />
+                {/* Click <a target="blank" href="https://forms.gle/GznUPJ7s5ZwZSsreA">here</a> if you would like to register and generate a password.<br /> */}
+                <SecurityScanFilled style={{color: '#0275d8'}}/> 1. Authenticate so that we know you are on our side.<br />
+                <PhoneFilled style={{color: '#f0ad4e'}}/> 2. Verify the lead by tapping the number to call.<br />
+                <LikeFilled style={{color: '#5cb85c'}}/> 3. Click the button given to mark as 'Working' or 'Not Working'.
                 </p>
-                <Form>
-                    <Form.Item
-                        name="password"
-                        label="Password: "
-                    >
-                        <Input placeholder="Enter Passcode" onChange={checkPasscode} />
-                    </Form.Item>
-                </Form>
+                <Login />
             </div>
         )}
         </>

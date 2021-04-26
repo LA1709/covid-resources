@@ -29,54 +29,54 @@ const styles= {
     }
 }
 
-const options = ['Oxygen', 'Remdesivir', 'Plasma', 'Beds', 'Other Medicines', 'Food', 'Tocilizumab'];
+const options = ['Oxygen', 'Remdesivir', 'Plasma', 'Beds', 'Other Medicines', 'Food', 'Tocilizumab', 'Ambulance'];
 
 function getDateTimeDifference(timeStamp){
-    // var convertedDateTime = new Date(timeStamp);
-    // var currentDateTime = new Date();
-    // var diff = (currentDateTime - convertedDateTime)/1000;
-    // var result = 0;
-    // var unit;
-    // var suffix = " ago";
+    var convertedDateTime = new Date(timeStamp);
+    var currentDateTime = new Date();
+    var diff = (currentDateTime - convertedDateTime)/1000;
+    var result = 0;
+    var unit;
+    var suffix = " ago";
 
-    // if(diff < 60){
-    //     unit = " second";
-    //     result = diff;
-    // }
-    // else if(diff < 60*60){
-    //     unit = " minute";
-    //     result =  parseInt(diff/60);
-    // }
-    // else if(diff < 60*60*24){
-    //     unit = " hour";
-    //     result =  parseInt(diff/(60*60));
-    // }
-    // else if(diff < 60*60*24*7){
-    //     unit = " day";
-    //     result = parseInt(diff/(60*60*24));
-    // }
-    // else if(diff < 60*60*24*30){
-    //     unit = " week";
-    //     result = parseInt(diff/(60*60*24*7));
-    // }
-    // else{
-    //     unit = " month";
-    //     result = parseInt(diff/(60*60*24*30));
-    // }
-    // if(result == 1){
-    //     return result + unit + suffix;
-    // }
-    // else{
-    //     return result + unit + "s" + suffix;
-    // }
-    const d = new Date(timeStamp);
-    const mon = d.getMonth();
-    const day = d.getDate();
-    const y = d.getFullYear();
-    const hrs = d.getHours();
-    const min = d.getMinutes();
-    const sec = d.getSeconds();
-    return `${day}/${mon}/${y} at ${hrs}:${min}:${sec}`
+    if(diff < 60){
+        unit = " second";
+        result = diff;
+    }
+    else if(diff < 60*60){
+        unit = " minute";
+        result =  parseInt(diff/60);
+    }
+    else if(diff < 60*60*24){
+        unit = " hour";
+        result =  parseInt(diff/(60*60));
+    }
+    else if(diff < 60*60*24*7){
+        unit = " day";
+        result = parseInt(diff/(60*60*24));
+    }
+    else if(diff < 60*60*24*30){
+        unit = " week";
+        result = parseInt(diff/(60*60*24*7));
+    }
+    else{
+        unit = " month";
+        result = parseInt(diff/(60*60*24*30));
+    }
+    if(result == 1){
+        return result + unit + suffix;
+    }
+    else{
+        return result + unit + "s" + suffix;
+    }
+    // const d = new Date(timeStamp);
+    // const mon = d.getMonth();
+    // const day = d.getDate();
+    // const y = d.getFullYear();
+    // const hrs = d.getHours();
+    // const min = d.getMinutes();
+    // const sec = d.getSeconds();
+    // return `${day}/${mon}/${y} at ${hrs}:${min}:${sec}`
 }
 
 function getSortedLeads(leadsJsonObject) {

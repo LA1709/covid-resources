@@ -1,6 +1,6 @@
 import { Card, Row, Col } from "antd";
 import insta from "./assets/instagram.svg";
-import linkedin from "./assets/linkedin.svg";
+import twitter from "./assets/twitter.svg";
 import car from "./assets/car.jpg"
 
 const Seeker = () => {
@@ -12,7 +12,7 @@ const Seeker = () => {
                 whatsapp, instagram and twitter. <br /><b>Please note: </b> 
                 Everyone is running out of stock, capacity and resources so if you find numbers that are switched off/busy or not picking up, move on to the next one.
             </Card>
-            <Card title="Our Team">
+            {/* <Card title="Our Team">
                 <Row gutter={[{ sm: 14, md: 20, lg: 24 }, 16]}>
                     <Col sm={7} md={10} lg={12}>
                     A huge shoutout to <a href="https://www.instagram.com/covidaidresources/" target="blank">Covid Aid Resources</a> for working day and night to provide help to those who need it in these times of crisis.
@@ -23,7 +23,7 @@ const Seeker = () => {
                     </a>
                     </Col>
                 </Row>
-            </Card>
+            </Card> */}
             <Card title="Contact us">
                 <Row gutter={[{ sm: 14, md: 20, lg: 24 }, 16]}>
                     <Col sm={7} md={10} lg={12}>
@@ -34,18 +34,14 @@ const Seeker = () => {
                     <a href={`tel:+917354302000`}>7354302000</a>
                     </Col>
                     <Col sm={7} md={10} lg={12}>
-                        <Row gutter={[{ sm: 6, md: 8, lg: 16 }, 16]}>
-                        <Col sm={3} md={4} lg={8} style={{textAlign: "right"}}>
-                        <a href="https://www.instagram.com/lakshay.agrawal/" target="blank">
-                            <img src={insta} width="30%" style={{minWidth:'50px'}} alt="instagram" />
+                        <div>
+                        <a href="https://www.instagram.com/covid_khoj/" target="blank">
+                            <img src={insta} width="60px" alt="instagram" style={{marginRight: '30px'}}/>
                         </a>
-                        </Col>
-                        <Col sm={3} md={4} lg={8} style={{textAlign: "right"}}>
-                        <a href="https://www.linkedin.com/in/lakshay-agrawal-1515231a0/" target="blank">
-                            <img src={linkedin} width="30%" style={{minWidth:'50px'}} alt="linkedin" />
+                        <a href="https://twitter.com/CovidKhoj" target="blank">
+                            <img src={twitter} width="60px" alt="twitter" />
                         </a>
-                        </Col>
-                        </Row>
+                        </div>
                     </Col>
                 </Row>
             </Card>
