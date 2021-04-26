@@ -98,6 +98,11 @@ function getSortedLeads(leadsJsonObject) {
     return sortedLeadsObject;
 }
 
+const checkDetails = (item) => {
+    if ((item.desc||item.area) && (item.desc!="")) return false;
+    else return true
+}
+
 const Seeker = ({queries}) => {
     const [state, setState] = useState(undefined);
     const [categ, setCateg] = useState(undefined);
@@ -146,7 +151,7 @@ const Seeker = ({queries}) => {
         <div style={styles.wrapper}>
             <p style={{marginBottom: '10px'}}>
             <b>Please Note: </b>This is <b>Crowdsourced data</b> to fight COVID across India. The data is made available to public as is, and is being verified by our volunteers in realtime.
-            <b> However, </b>Everyone is running out of stock, capacity and resources so if you find numbers that are switched off/busy or not picking up, please move on to the next one.
+            <b> Despite our best efforts to verify the data, please exercise extreme caution in financial transactions. There have been reports of malpractices, please excercise precaution! </b>
             </p>
             <Form layout="inline">
                 {/* <Form.Item>
@@ -182,7 +187,12 @@ const Seeker = ({queries}) => {
                 </Form.Item>
             </Form>
             <Modal title="Details" visible={details} onCancel={() => setDetails(null)} footer={null}>
-                {details}
+                {details && 
+                    <div>
+                    {details.area && <b>AREA: {details.area}</b>}<br />
+                    {details.desc}
+                    </div>
+                }
             </Modal>
             <h1 style={styles.heading}>Help Providers</h1>
             {result? (
@@ -205,21 +215,21 @@ const Seeker = ({queries}) => {
                                 dataSource={Object.entries(getSortedLeads(result[region][cat]))}
                                 renderItem={item => (
                                 <List.Item>
-                                    <Card key={item[0]}>
+                                    <Card key={item[0]} style={{borderRadius: '4px'}}>
                                         <div><b>NAME: </b>{item[1].name}</div>
                                         <div><b>PHONE: </b>
                                         <a href={`tel:+91${item[0]}`}>{item[0]}</a><br />
                                         <div><b>Last Verified: </b>{item[1].verified?getDateTimeDifference(item[1].verified):item[1].date+' at '+item[1].time}</div>
                                         <center>
-                                        {item[1].desc && 
                                         <div style={{display: 'inline', marginRight: '4px'}}>
-                                            <Button type="primary" onClick={()=>setDetails(item[1].desc)}>
+                                            <Button type="primary" disabled={checkDetails(item[1])} onClick={()=>{setDetails(item[1])}}>
                                                 Details
                                             </Button>
                                         </div>
-                                        }
                                         <div style={{display: 'inline'}}>
-                                        <a target="blank" href={`https://api.whatsapp.com/send?phone=91${item[0]}`}>
+                                        <a target="blank" href={`https://api.whatsapp.com/send?phone=${
+                                                item[0].match(/^\d{10}$/)?'91'+item[0].match(/\d{10}/):""
+                                            }`}>
                                             <Button type="primary">Message</Button>
                                         </a>
                                         </div>

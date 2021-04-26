@@ -72,9 +72,9 @@ const App = () => {
             <Route path="/volunteer">
                 <Volunteer />
             </Route>
-            <Route path="/admin">
+            {/* <Route path="/admin">
                 <Admin />
-            </Route>
+            </Route> */}
             <Route path="/update">
                 <Update queries={help} unchecked={unverified} functions={{v: setHelp, u: setUnverified}} />
             </Route>

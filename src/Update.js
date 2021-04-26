@@ -308,7 +308,7 @@ const Update = ({queries, unchecked, functions}) => {
         ) : (
             <div style={{marginLeft: '18%', marginTop: '10%'}}>
                 <p style={{fontSize: '1.5em'}}>
-                That you for joining us in this noble cause! We have a simple 3 step process to fight covid: <br /> <br />
+                Thank you for joining us in this noble cause! We have a simple 3 step process to fight covid: <br /> <br />
                 {/* Click <a target="blank" href="https://forms.gle/GznUPJ7s5ZwZSsreA">here</a> if you would like to register and generate a password.<br /> */}
                 <SecurityScanFilled style={{color: '#0275d8'}}/> 1. Authenticate so that we know you are on our side.<br />
                 <PhoneFilled style={{color: '#f0ad4e'}}/> 2. Verify the lead by tapping the number to call.<br />

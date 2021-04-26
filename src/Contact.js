@@ -1,7 +1,7 @@
 import { Card, Row, Col } from "antd";
 import insta from "./assets/instagram.svg";
 import twitter from "./assets/twitter.svg";
-import car from "./assets/car.jpg"
+import mail from "./assets/mail.svg"
 
 const Seeker = () => {
     return (
@@ -39,7 +39,10 @@ const Seeker = () => {
                             <img src={insta} width="60px" alt="instagram" style={{marginRight: '30px'}}/>
                         </a>
                         <a href="https://twitter.com/CovidKhoj" target="blank">
-                            <img src={twitter} width="60px" alt="twitter" />
+                            <img src={twitter} width="60px" alt="twitter" style={{marginRight: '30px'}} />
+                        </a>
+                        <a href="mailto:covidkhoj@gmail.com" target="blank">
+                            <img src={mail} width="60px" alt="email" style={{marginRight: '30px'}} />
                         </a>
                         </div>
                     </Col>

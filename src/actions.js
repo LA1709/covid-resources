@@ -21,32 +21,23 @@ export const getUnverified = (update) => {
 export const addData = (arr) => {
     let result = {};
     arr.forEach(lead => {
-        if(lead['Contact detail'] && lead['State']!="" && lead['State'].match("/")==null && lead['Contact detail'].match(/\d{10}/)){//&&lead['STATE']&&lead['Type of Help']&&lead.Phone){
+        if(lead['phone'] && lead['State']!="" && lead['State'].match("/")==null){//&&lead['STATE']&&lead['Type of Help']&&lead.Phone){
         // const s = lead['Status'].toLowerCase();
         const st = lead['State'].toLowerCase()//.replace(/\/|\./g, "_");
-        const cat = 'oxygen'//lead['Type of Help'].toLowerCase().replace(" ", "_");
+        const cat = 'Remdesivir'//lead['Type of Help'].toLowerCase().replace(" ", "_");
         // if (!result[s]) result[s]={};
-        if (!result[st]) result[st]={};
-        if (!result[st][cat]) result[st][cat]={};
-        result[st][cat][lead['Contact detail'].replace(/\/|\./g, "_")] = {
-            // link: lead['Address/Link'],
-            // area: lead['Area'],
-            // city: lead['City'],
-            desc: lead['Location'],
-            name: lead['Name of the facility'],
-            // pincode: lead['Zip Code']
-            verified: 161922019060
-        }
+        result [`${st}/${cat}/${lead['phone']}`] = {
+                ...lead
+            }
     }
     })
-    // console.log(result)
-    database.ref(`data/temp`).update(result).then(()=>console.log(result)).catch(e=>console.log(e));
+    console.log({...result})
+    // database.ref(`data/temp`).update(result).then(()=>console.log(result)).catch(e=>console.log(e));
 }
 
 export const logChange = (item, change) => {
     const email = localStorage.getItem('email');
-    const key = database.ref(`logs/`).push();
-    database.ref(`logs/${key}`).update({
+    database.ref(`logs/${email}`).push().set({
         state: item[2],
         category: item[3],
         phone: item[0],
@@ -90,19 +81,15 @@ export const exhausted = (item, toggle, refresh) => {
 }
 
 export const addHelp = (data, report) => {
-    const dbRef = database.ref(`unverified/${data.region}/${data.category}/${data.phone}`);
+    const email = localStorage.getItem('email');
+    const dbRef = database.ref(`${email?'help':'unverified'}/${data.region}/${data.category}/${data.phone}`);
+    const obj = {};
+    ['desc', 'area', 'name', 'verified'].forEach(key => {
+        if (data[key]) obj[key] = data[key]
+    })
     dbRef.once('value').then(ss => {
-        if (ss.exists() && !data.date) report("707")
-        else if (data.date) {
-            let obj = {};
-            // if(data.desc) obj = {name: data.name, desc: data.desc, verified: data.date.valueOf()};
-            obj = {name: data.name, verified: data.date.valueOf()}
-            dbRef.update(obj).then(s => report("200"))
-        }
+        if (ss.exists() && !data.verified) report("707");
         else {
-            let obj = {};
-            if(data.desc) obj = {name: data.name, desc: data.desc};
-            else obj = {name: data.name}
             dbRef.update(obj).then(s => report("200"))
         }
     }).catch(e => report("400"))

@@ -101,6 +101,12 @@ const Volunteer = () => {
                         />
                     </Form.Item>
                     <Form.Item
+                        label="Area/City"
+                        name="area"
+                    >
+                        <Input placeholder="Enter city or area" />
+                    </Form.Item>
+                    <Form.Item
                         name="category"
                         label="Category"
                         rules={[{ required: true, message: 'Please select a category' }]}
@@ -125,7 +131,7 @@ const Volunteer = () => {
                     </Form.Item>
                     <Form.Item
                         label="Verified On"
-                        name="date"
+                        name="verified"
                         style={styles.item}
                     >
                         <DatePicker showTime />

@@ -1,5 +1,6 @@
 import { Row, Col, Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { TwitterOutlined } from '@ant-design/icons';
 
 const styles = {
     wrapper: {
@@ -66,6 +67,11 @@ const styles = {
         color: 'black',
         margin: '5px',
         borderRadius: '2px'
+    },
+    liveBtn: {
+        width: '90%',
+        maxWidth: '400px',
+        marginBottom: '15px'
     }
 }
 
@@ -117,7 +123,7 @@ const Home = () => {
                                 <Col>
                                 <a target="blank" href="https://forms.gle/GznUPJ7s5ZwZSsreA">
                                     <p style={styles.customAlert}>
-                                        Have a similar idea/platfrom/souces/tools? We are looking for collaborators! Click here to <b>join us</b> in this fight against covid!
+                                        Have a similar idea / platform / sources / tools? We are looking for collaborators! Click here to <b>join us</b> in this fight against covid!
                                     </p>
                                 </a>
                                 </Col>
@@ -152,6 +158,11 @@ const Home = () => {
                     </Card>
                 </Col>
             </Row>
+            <div style={{textAlign: 'center'}}>
+                <Link to="/dashboard">
+                <Button icon={<TwitterOutlined />} size="large" type="primary" style={styles.liveBtn}>Live Covid Data</Button>
+                </Link>
+            </div>
             <p style={{marginBottom: '10px', background: '#fff3cd', padding: '10px', outline: '1px solid #ffcc00'}}>
             <b>Note: </b>Please ensure you are in compliance with Government of India, state governments in India and local law enforcement authority rules and regulations when using Leads/Suppliers from this site; or providing a Lead/Supply on this site.
             This is <b>Crowdsourced data</b> to fight COVID across India. The data is made available to public as is, and is being verified by our volunteers in realtime.
