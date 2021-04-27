@@ -29,9 +29,8 @@ const Seeker = () => {
                     <Col sm={7} md={10} lg={12}>
                     We are doing our best to continuously keep this updated, any help is much appreciated, please send us as many verified links as you can and share actively!
                     <br />
-                    <a href='https://forms.gle/GznUPJ7s5ZwZSsreA'>Reach out and join us!</a><br />
-                    Contact: <a href={`tel:+916397973267`}>6397973267</a>{' | '}
-                    <a href={`tel:+917354302000`}>7354302000</a>
+                    <a href='https://forms.gle/GznUPJ7s5ZwZSsreA'>Reach out and join us! </a>
+                    or <a href="https://forms.gle/89sBUL1bXY9ypoUi7">Give Feedback</a>
                     </Col>
                     <Col sm={7} md={10} lg={12}>
                         <div>

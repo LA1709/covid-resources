@@ -82,42 +82,29 @@ export const exhausted = (item, toggle, refresh) => {
 
 export const addHelp = (data, report) => {
     const email = localStorage.getItem('email');
-    const dbRef = database.ref(`${email?'help':'unverified'}/${data.region}/${data.category}/${data.phone}`);
+    const child = email?data.verified?'help':'unverified':'unverified';
+    const dbRef = database.ref(`${child}/${data.region}/${data.category}/${data.phone}`);
     const obj = {};
     ['desc', 'area', 'name', 'verified'].forEach(key => {
         if (data[key]) obj[key] = data[key]
     })
     dbRef.once('value').then(ss => {
         if (ss.exists() && !data.verified) report("707");
-        else {
-            dbRef.update(obj).then(s => report("200"))
-        }
+        else dbRef.update(obj).then(s => report("200"));
     }).catch(e => report("400"))
 }
 
-export const addHelpAdmin = (data, report) => {
-    const dbRef = database.ref(`help/${data.region}/${data.category}/`);
-    const names = data.name.split(",");
-    const phones = data.phone.match(/\d{10}/g);
-    if(names.length===phones.length) {
-        const obj = {};
-        phones.forEach((num, i) => {
-            obj[num] = {name: names[i], verified: Date.now()}
-        });
-        dbRef.update(obj).then(()=>report("200")).catch(e=>console.log(e));
-    }
-    else console.log(names, phones)
-    // const dbRef = database.ref(`help/`);
-    // dbRef.once('value').then(ss => {
-    //     const help = ss.val();
-    //     const d = new Date();
-    //     Object.keys(help).forEach(region => {
-    //         Object.keys(help[region]).forEach(categ => {
-    //             Object.keys(help[region][categ]).forEach(key => {
-    //                 help[region][categ][key]['verified'] = 1619102574979;
-    //             })
-    //         })
-    //     })
-    //     dbRef.update(help).then(()=>report("200"))
-    // })
+export const getHelpAdmin = (report) => {
+    const dbRef = database.ref(`volunteers/numbers`);
+    // const names = data.name.split(",");
+    // const phones = data.phone.match(/\d{10}/g);
+    // if(names.length===phones.length) {
+    //     const obj = {};
+    //     phones.forEach((num, i) => {
+    //         obj[num] = {name: names[i], verified: Date.now()}
+    //     });
+    //     dbRef.update(obj).then(()=>report("200")).catch(e=>console.log(e));
+    // }
+    // else console.log(names, phones)
+    dbRef.once('value').then(ss => report(ss.val()));
 }

@@ -11,7 +11,7 @@ import Volunteer from './Volunteer';
 import Admin from './Admin';
 import Update from './Update';
 import Dashboard from './Dashboard'
-import { getHelpers, getUnverified, getLinks } from './actions';
+import { getHelpers, getUnverified, getLinks, getHelpAdmin } from './actions';
 import Resources from './resources';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
@@ -23,11 +23,13 @@ const App = () => {
   const [help, setHelp] = useState({});
   const [unverified, setUnverified] = useState({});
   const [links, setLinks] = useState([]);
+  const [numbers, setNumbers] = useState([]);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => getHelpers(setHelp), [setHelp]);
   useEffect(() => getUnverified(setUnverified), [setUnverified]);
   useEffect(() => getLinks(setLinks), [setLinks]);
+  useEffect(() => getHelpAdmin(setNumbers), [getHelpAdmin]);
 
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const name = localStorage.getItem('name');
@@ -87,7 +89,7 @@ const App = () => {
           </Switch>
         </Content>
         <Footer style={{ textAlign: 'center', backgroundColor: 'white', marginTop: '10px', color: '#646464'}}>
-          Covid Khoj ©2021 Created by Lakshay Agrawal <Link to="/about">(About Us)</Link>
+          ©2021 Team Covid Khoj <Link to="/about">(About Us)</Link>
         </Footer>
       </Layout>
     </Layout>

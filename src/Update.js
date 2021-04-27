@@ -96,7 +96,7 @@ const Update = ({queries, unchecked, functions}) => {
             <>
                 {vst? 
                 <div><img src={verified} width="10%" style={{marginRight: '5%'}} />Verifed on {makedate(d)}</div>
-                : d[1].verified?<div>Not working on {makedate(d)}</div>:<div>UNVERIFIED ENTRY</div>
+                : d[1].verified?<div>Last checked on {makedate(d)}</div>:<div>UNVERIFIED ENTRY</div>
                 }
             </>
         )
