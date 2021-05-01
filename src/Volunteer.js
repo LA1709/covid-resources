@@ -44,7 +44,7 @@ const Volunteer = () => {
             temp.name = e.name;
             temp.phone = e.phone;
             if(e.desc) temp.desc=e.desc;
-            if(e.date) temp.date=e.date.toDate();
+            if(e.verified) temp.verified=e.verified.toDate();
             addHelp(temp, setSub);
         }
     }

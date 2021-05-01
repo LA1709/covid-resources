@@ -11,7 +11,7 @@ import Volunteer from './Volunteer';
 import Admin from './Admin';
 import Update from './Update';
 import Dashboard from './Dashboard'
-import { getHelpers, getUnverified, getLinks, getHelpAdmin } from './actions';
+import { getHelpers, getUnverified, getLinks, getHelpAdmin, setUserLogin } from './actions';
 import Resources from './resources';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
@@ -33,6 +33,9 @@ const App = () => {
 
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   const name = localStorage.getItem('name');
+  const email = localStorage.getItem('email');
+
+  if(isLoggedIn) setUserLogin(name, email);
 
   return (
   <BrowserRouter>
@@ -74,9 +77,9 @@ const App = () => {
             <Route path="/volunteer">
                 <Volunteer />
             </Route>
-            {/* <Route path="/admin">
-                <Admin />
-            </Route> */}
+            <Route path="/admin">
+                <Admin numbers={numbers}/>
+            </Route>
             <Route path="/update">
                 <Update queries={help} unchecked={unverified} functions={{v: setHelp, u: setUnverified}} />
             </Route>

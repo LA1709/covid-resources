@@ -30,8 +30,8 @@ const Admin = ({ numbers }) => {
             <Reader />
             <Card title="Volunteers">
                 <ol>
-                    {numbers.map(number =>
-                        <li><a href={`tel:${number}`}>{number}</a></li>
+                    {numbers.filter((v, i, a) => a.indexOf(v) === i).map(number =>
+                        <li key={number}><a href={`https://api.whatsapp.com/send?phone=${number}`}>{number}</a></li>
                     )}
                 </ol>
             </Card>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { TwitterOutlined } from '@ant-design/icons';
@@ -84,9 +85,12 @@ const props = {
 }
 
 const Home = () => {
+
+    const [loading, SetLoading] = useState(false);
+
     return (
         <div style={styles.wrapper}>
-            <center>
+            {/* <center>
             <div style={styles.cta}>
                 <a target="blank" href="https://forms.gle/GznUPJ7s5ZwZSsreA">
                 <Button type="primary" shape="round" style={styles.ctabtn}>
@@ -94,7 +98,7 @@ const Home = () => {
                 </Button>
                 </a>
             </div>
-            </center>
+            </center> */}
             <Row gutter={[{ sm: 16, md: 20, lg: 24 }, 16]}>
                 <Col sm={8} md={10} lg={12} style={styles.container}>
                     <Card style={styles.helpCard}>
@@ -142,7 +146,9 @@ const Home = () => {
                                             <p style={{ fontSize: 'calc(16px + 0.1vw)', color: "#383838" }}>Click the following button to get a list of resources and leads which are crowd-sourced from whatsapp groups and other volunteers</p>
                                         </div>
                                     </div>
-                                    <Button shape="round" size="large" type="danger" style={styles.helpButton}>I need help!</Button>
+                                    <Button shape="round" size="large" type="danger" style={styles.helpButton}
+                                        onClick={()=>SetLoading(true)} disabled={loading}
+                                    >{loading?"Please wait ...":"I need help!"}</Button>
                                 </Link>
                             </Col>
                         </Row>

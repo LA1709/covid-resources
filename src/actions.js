@@ -18,6 +18,14 @@ export const getUnverified = (update) => {
     })
 }
 
+export const setUserLogin = (name, email) => {
+    const dbRef = database.ref(`volunteers/users/${email.replace(/\./g, "")}`);
+    dbRef.once('value').then(ss => {
+        if(!ss.exists()) dbRef.set({name: name, email: email, access_level: 1})
+        else console.log("Exists")
+    })
+}
+
 export const addData = (arr) => {
     let result = {};
     arr.forEach(lead => {
@@ -37,7 +45,7 @@ export const addData = (arr) => {
 
 export const logChange = (item, change) => {
     const email = localStorage.getItem('email');
-    database.ref(`logs/${email}`).push().set({
+    database.ref(`logs/`).push().set({
         state: item[2],
         category: item[3],
         phone: item[0],
@@ -47,9 +55,9 @@ export const logChange = (item, change) => {
     })
 }
 
-export const markVerified = (item, toggle, refresh) => {
+export const markVerified = (item, toggle, refresh, desc) => {
     database.ref(`help/${item[2]}/${item[3]}/${item[0]}`)
-    .update({...item[1], verified: Date.now()}).then(()=>{
+    .update({...item[1], desc: item[1].desc+'\n'+desc, verified: Date.now()}).then(()=>{
         database.ref(`unverified/${item[2]}/${item[3]}/${item[0]}`).set(null)
         .then(()=>{
             refresh[0]?getHelpers(refresh[1]):getUnverified(refresh[1]);
@@ -58,9 +66,9 @@ export const markVerified = (item, toggle, refresh) => {
     });
 }
 
-export const wrongEntry = (item, toggle, refresh) => {
+export const wrongEntry = (item, toggle, refresh, desc) => {
     database.ref(`data/wrong/${item[2]}/${item[3]}/${item[0]}`)
-    .update({...item[1], verified: Date.now()}).then(()=>{
+    .update({...item[1], desc: item[1].desc+'\n'+desc, verified: Date.now()}).then(()=>{
         database.ref(`unverified/${item[2]}/${item[3]}/${item[0]}`).set(null)
         .then(()=>{
             getUnverified(refresh);
@@ -69,9 +77,9 @@ export const wrongEntry = (item, toggle, refresh) => {
     });
 }
 
-export const exhausted = (item, toggle, refresh) => {
+export const exhausted = (item, toggle, refresh, desc) => {
     database.ref(`unverified/${item[2]}/${item[3]}/${item[0]}`)
-    .update({...item[1], verified: Date.now()}).then(()=>{
+    .update({...item[1], desc: item[1].desc+'\n'+desc, verified: Date.now()}).then(()=>{
         database.ref(`help/${item[2]}/${item[3]}/${item[0]}`).set(null)
         .then(()=>{
             getHelpers(refresh);
@@ -94,6 +102,17 @@ export const addHelp = (data, report) => {
     }).catch(e => report("400"))
 }
 
+const unNoise = (arr=[]) => {
+    if (arr) {
+            return arr.map(val => {
+            if(val.match(/^\d{10}$/)) return '+91'+val;
+            else if(val.match(/^0\d{10}$/)) return '+91'+val.slice(1,);
+            else if(val.match(/^\+91/)) return val;
+            else return 'Huh?'+val;
+        })
+    }
+}
+
 export const getHelpAdmin = (report) => {
     const dbRef = database.ref(`volunteers/numbers`);
     // const names = data.name.split(",");
@@ -106,5 +125,5 @@ export const getHelpAdmin = (report) => {
     //     dbRef.update(obj).then(()=>report("200")).catch(e=>console.log(e));
     // }
     // else console.log(names, phones)
-    dbRef.once('value').then(ss => report(ss.val()));
+    dbRef.once('value').then(ss => report(unNoise(ss.val())));
 }

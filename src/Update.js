@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Form, AutoComplete, Select, Button, Row, Col, Card, Alert, List, Modal } from 'antd';
+import { Form, AutoComplete, Select, Button, Row, Col, Card, Alert, List, Modal, Input } from 'antd';
 import { ArrowLeftOutlined, SecurityScanFilled, PhoneFilled, LikeFilled } from '@ant-design/icons';
 import { states } from './states';
 import { Link } from 'react-router-dom';
@@ -80,7 +80,6 @@ const filterVerified = (data, update) => {
     })
     if(!stop) update(result);
     else update(undefined);
-    console.log(result)
 }
 
 const Update = ({queries, unchecked, functions}) => {
@@ -88,7 +87,7 @@ const Update = ({queries, unchecked, functions}) => {
     const [categ, setCateg] = useState(undefined);
     const [result, setResult] = useState({});
     const [details, setDetails] = useState(null);
-    const [vst, setVst] = useState(false);
+    const [vst, setVst] = useState(true);
     // const [pass, setPass] = useState(false);
 
     const ModalHeader = ({d}) => {
@@ -133,33 +132,36 @@ const Update = ({queries, unchecked, functions}) => {
             }
             else filterVerified(queries, setResult);
         } else {
-            if (state && categ) {
-                let temp = {};
-                if (unchecked[state] && unchecked[state][categ]) {
-                    temp[state] = {};
-                    temp[state][categ] = unchecked[state][categ];
-                } else temp=undefined;
-                setResult(temp);
+            if (unchecked) {
+                if (state && categ) {
+                    let temp = {};
+                    if (unchecked[state] && unchecked[state][categ]) {
+                        temp[state] = {};
+                        temp[state][categ] = unchecked[state][categ];
+                    } else temp=undefined;
+                    setResult(temp);
+                }
+                else if (state) {
+                    let temp = {};
+                    if (unchecked[state]) temp[state] = unchecked[state];
+                    else temp = undefined;
+                    setResult(temp);
+                }
+                else if (categ) {
+                    let stop=true, temp = {};
+                    Object.entries(unchecked).forEach(kvp => {
+                        if (kvp[1][categ]) {
+                            if(stop) stop=false;
+                            temp[kvp[0]] = {};
+                            temp[kvp[0]][categ] = kvp[1][categ];
+                        }
+                    });
+                    if (stop) temp = undefined;
+                    setResult(temp);
+                }
+                else setResult(unchecked);
             }
-            else if (state) {
-                let temp = {};
-                if (unchecked[state]) temp[state] = unchecked[state];
-                else temp = undefined;
-                setResult(temp);
-            }
-            else if (categ) {
-                let stop=true, temp = {};
-                Object.entries(unchecked).forEach(kvp => {
-                    if (kvp[1][categ]) {
-                        if(stop) stop=false;
-                        temp[kvp[0]] = {};
-                        temp[kvp[0]][categ] = kvp[1][categ];
-                    }
-                });
-                if (stop) temp = undefined;
-                setResult(temp);
-            }
-            else setResult(unchecked);
+            else setResult(undefined)
         }
     }
 
@@ -212,7 +214,7 @@ const Update = ({queries, unchecked, functions}) => {
                 >
                     <Select
                         onChange={c => setCateg(c)}
-                        defaultValue={false}
+                        defaultValue={true}
                         onChange={e=>setVst(e)}
                     >
                     <Option value={true}>VERIFIED more than 24 hrs ago</Option>
@@ -225,18 +227,23 @@ const Update = ({queries, unchecked, functions}) => {
             >
                 {vst ? <div style={{marginBottom: '20px'}}>
                     Please use the following buttons to change the verification status.<br />
-                    <b>Note:<br />
-                    If the user is not picking up or you are in doubt, DO NOT mark as not working and DO NOT mark as WRONG, they may just be busy.
-                    </b>
                 </div> : <div>
                     Please click the following button to mark as verified. We request you to not give unverified data.
                 </div>}
+                <b>Current Description: </b><br />
+                {details?details[1].desc?details[1].desc:"No description provided.":""}<br />
+                <b>Edit the description as necessary: </b>
+                <Input.TextArea
+                    style={{marginBottom: '10px'}}
+                    placeholder="Enter the additional comments in case needed."
+                    id="descbox"
+                />
                 <Row style={{width: '100%'}}>
                     <Col style={styles.v}>
                         <Button 
                             type="primary"
                             onClick={()=>{
-                                markVerified(details, setDetails, [vst, vst?functions.v:functions.u]);
+                                markVerified(details, setDetails, [vst, vst?functions.v:functions.u], document.getElementById('descbox').value);
                                 logChange(details, "Reverified");
                             }}
                         >
@@ -247,7 +254,7 @@ const Update = ({queries, unchecked, functions}) => {
                         <Button 
                             type="default"
                             onClick={()=>{
-                                exhausted(details, setDetails, functions.v);
+                                exhausted(details, setDetails, functions.v, document.getElementById('descbox').value);
                                 logChange(details, "Changed from working to exhausted");
                             }}
                         >Not Working</Button>
@@ -256,7 +263,7 @@ const Update = ({queries, unchecked, functions}) => {
                         <Button 
                             type="danger"
                             onClick={()=>{
-                                wrongEntry(details, setDetails, functions.u);
+                                wrongEntry(details, setDetails, functions.u, document.getElementById('descbox').value);
                                 logChange(details, "Marked as a wrong entry");
                             }}
                         >Wrong Number</Button>
@@ -302,7 +309,7 @@ const Update = ({queries, unchecked, functions}) => {
                         )}
                     </div>
                         // {/* </Card> */}
-                    )}</div>) : <Alert style={{marginTop: '10px'}} type="warning" message="We are working on finding new leads every second, please hold on tight!" showIcon/>}
+                    )}</div>) : <Alert style={{marginTop: '10px'}} type="warning" message="Hurrah! There are no more unverified leads! Please move to the 'verified more than 24 hrs ago' section!" showIcon/>}
             </div>
         </div>
         ) : (
