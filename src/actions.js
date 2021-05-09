@@ -22,7 +22,19 @@ export const getPics = (update) => {
     const d = new Date();
     database.ref(`instascraper/data/${d.toISOString().slice(0,10)}/checked`)
     .once('value').then(snapshot => {
-        if(snapshot.exists()) update(snapshot.val())
+        let result;
+        if (snapshot.exists()) result = snapshot.val();
+        if (!(result && Object.keys(result).length>40)) {
+            const yesterday =  new Date(Date.now() - 86400000);
+            database.ref(`instascraper/data/${yesterday.toISOString().slice(0,10)}/checked`)
+            .once('value').then(snapshot => {
+                if (snapshot.exists()) {
+                    const newResult = snapshot.val();
+                    result = {...result, newResult};
+                }
+                update(result);
+            })
+        } else update(result);
     })
 }
 

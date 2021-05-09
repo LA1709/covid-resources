@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getPics } from './actions';
-import { Modal } from 'antd';
+import { Modal, Button } from 'antd';
+import LaunchIcon from './assets/launch-icon.png';
 
 const styles = {
     instaImage: {
@@ -10,33 +11,53 @@ const styles = {
     }
 }
 
-const getImage = (url, imgId) => {
-    const img = document.getElementById(imgId)
-        if (img)
-        {
-        fetch('https://laimage-server.herokuapp.com/getImage', {
-            method: 'post', 
-            body: JSON.stringify({src: url}), 
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            img.src = data.src;
-        })
-    }
+// const getImage = (url, imgId) => {
+//     const img = document.getElementById(imgId)
+//         if (img)
+//         {
+//         fetch('https://laimage-server.herokuapp.com/getImage', {
+//             method: 'post', 
+//             body: JSON.stringify({src: url}), 
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//         .then(res => res.json())
+//         .then(data => {
+//             img.src = data.src;
+//         })
+//     }
+// }
+
+const OpenStory = ({ url }) => {
+    return (
+        <>
+            <a href={"https://www.instagram.com/stories/"+url} target="blank">
+                Open on Instagram
+                <img src={LaunchIcon} width="15px" height="15px" style={{marginLeft: "10px"}} />
+            </a>
+        </>
+    )
 }
 
 const InstaScrape = ({}) => {
     const [pics, setPics] = useState({});
     const [modal, setModal] = useState(null);
+    const [story, setStory] = useState("");
 
     useEffect(()=>{
         getPics(setPics)
     }, [getPics])
 
-    const openModal = e => setModal(e.target.src);
+    const openModal = (e, id, user) => {
+        setStory(`${user}/${id.split("_")[0]}`);
+        setModal(e.target.src);
+    }
+
+    const closeModal = () => {
+        setStory(null);
+        setModal(null);
+    }
 
     return (
         <div>
@@ -50,10 +71,10 @@ const InstaScrape = ({}) => {
                     src={pics[pic].src}
                     // src={getImage(pics[pic].src, pic)}
                     alt="Loading..."
-                    onClick={openModal}
+                    onClick={e => openModal(e, pic, pics[pic].username)}
                 />
             )}
-            <Modal title="Instagram Image" visible={modal} onCancel={() => setModal(null)} footer={null}>
+            <Modal title={<OpenStory url={story}/>} visible={modal} onCancel={closeModal} footer={null}>
                 <img 
                    width="100%"
                    src={modal} 
