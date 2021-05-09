@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Form, AutoComplete, Select, Button, Card, Alert, List, Modal } from 'antd';
+import { Form, AutoComplete, Select, Button, Card, Alert, List, Modal, Spin } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { states } from './states';
 import { Link } from 'react-router-dom';
@@ -106,8 +106,14 @@ const checkDetails = (item) => {
 const Seeker = ({queries}) => {
     const [state, setState] = useState(undefined);
     const [categ, setCateg] = useState(undefined);
-    const [result, setResult] = useState({});
+    const [result, stResult] = useState({});
     const [details, setDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const setResult = (param) => {
+        stResult(param);
+        setLoading(false);
+    }
 
     const sortResult = () => {
         if (state && categ) {
@@ -139,9 +145,10 @@ const Seeker = ({queries}) => {
         else setResult(queries);
     }
 
-    useEffect(()=>sortResult(), [queries, state, categ]);
-
-
+    useEffect(()=>{
+        setLoading(true);
+        sortResult();
+    }, [queries, state, categ]);
 
     return (
         <>
@@ -195,7 +202,7 @@ const Seeker = ({queries}) => {
                 }
             </Modal>
             <h1 style={styles.heading}>Help Providers</h1>
-            {result? (
+            {!loading?result? (
                 <div>
                 {Object.keys(result).map(region =>
                     <div key={region}>
@@ -208,7 +215,7 @@ const Seeker = ({queries}) => {
                             //     title={cat.toUpperCase()}
                             //     key={cat}
                             // >
-                        <div>
+                        <div key={cat}>
                             <h3 style={styles.subheading}>{cat.toUpperCase()}</h3>
                             <List
                                 grid={{gutter: 16, xs: 2, sm: 3, md: 4, lg: 5}}
@@ -227,9 +234,7 @@ const Seeker = ({queries}) => {
                                             </Button>
                                         </div>
                                         <div style={{display: 'inline'}}>
-                                        <a target="blank" href={`https://api.whatsapp.com/send?phone=${
-                                                item[0].match(/^\d{10}$/)?'91'+item[0].match(/\d{10}/):""
-                                            }`}>
+                                        <a target="blank" href={`https://api.whatsapp.com/send?phone=+91${item[0]}`}>
                                             <Button type="primary">Message</Button>
                                         </a>
                                         </div>
@@ -244,7 +249,9 @@ const Seeker = ({queries}) => {
                         )}
                     </div>
                         // {/* </Card> */}
-                    )}</div>) : <Alert style={{marginTop: '10px'}} type="warning" message="No record Found" showIcon/>}
+                    )}</div>) : <Alert style={{marginTop: '10px'}} type="warning" message="No record Found" showIcon/>:
+                    <Spin />
+                }
         </div>
         </>
     )

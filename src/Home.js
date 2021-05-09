@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { TwitterOutlined } from '@ant-design/icons';
+import { TwitterOutlined, LinkOutlined } from '@ant-design/icons';
 
 const styles = {
     wrapper: {
@@ -67,11 +68,6 @@ const styles = {
         color: 'black',
         margin: '5px',
         borderRadius: '2px'
-    },
-    liveBtn: {
-        width: '90%',
-        maxWidth: '400px',
-        marginBottom: '15px'
     }
 }
 
@@ -84,9 +80,12 @@ const props = {
 }
 
 const Home = () => {
+
+    const [loading, SetLoading] = useState(false);
+
     return (
         <div style={styles.wrapper}>
-            <center>
+            {/* <center>
             <div style={styles.cta}>
                 <a target="blank" href="https://forms.gle/GznUPJ7s5ZwZSsreA">
                 <Button type="primary" shape="round" style={styles.ctabtn}>
@@ -94,7 +93,7 @@ const Home = () => {
                 </Button>
                 </a>
             </div>
-            </center>
+            </center> */}
             <Row gutter={[{ sm: 16, md: 20, lg: 24 }, 16]}>
                 <Col sm={8} md={10} lg={12} style={styles.container}>
                     <Card style={styles.helpCard}>
@@ -142,7 +141,9 @@ const Home = () => {
                                             <p style={{ fontSize: 'calc(16px + 0.1vw)', color: "#383838" }}>Click the following button to get a list of resources and leads which are crowd-sourced from whatsapp groups and other volunteers</p>
                                         </div>
                                     </div>
-                                    <Button shape="round" size="large" type="danger" style={styles.helpButton}>I need help!</Button>
+                                    <Button shape="round" size="large" type="danger" style={styles.helpButton}
+                                        onClick={()=>SetLoading(true)} disabled={loading}
+                                    >{loading?"Please wait ...":"I need help!"}</Button>
                                 </Link>
                             </Col>
                         </Row>
@@ -158,10 +159,17 @@ const Home = () => {
                     </Card>
                 </Col>
             </Row>
-            <div style={{textAlign: 'center'}}>
-                <Link to="/dashboard">
-                <Button icon={<TwitterOutlined />} size="large" type="primary" style={styles.liveBtn}>Live Covid Data</Button>
-                </Link>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{display:'inline', marginRight: '5%'}}>
+                    <Link to="/dashboard">
+                    <Button icon={<TwitterOutlined />} size="large" type="primary" style={{width:'45%', marginBottom: '15px'}}>Live Covid Data</Button>
+                    </Link>
+                </div>
+                <div style={{display:'inline'}}>
+                    <Link to="/resources">
+                    <Button icon={<LinkOutlined />} size="large" type="primary" style={{width:'45%', marginBottom: '15px'}}>Other Resources</Button>
+                    </Link>
+                </div>
             </div>
             <p style={{marginBottom: '10px', background: '#fff3cd', padding: '10px', outline: '1px solid #ffcc00'}}>
             <b>Note: </b>Please ensure you are in compliance with Government of India, state governments in India and local law enforcement authority rules and regulations when using Leads/Suppliers from this site; or providing a Lead/Supply on this site.
