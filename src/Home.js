@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Row, Col, Card, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { TwitterOutlined } from '@ant-design/icons';
+import { TwitterOutlined, LinkOutlined } from '@ant-design/icons';
 
 const styles = {
     wrapper: {
@@ -68,11 +68,6 @@ const styles = {
         color: 'black',
         margin: '5px',
         borderRadius: '2px'
-    },
-    liveBtn: {
-        width: '90%',
-        maxWidth: '400px',
-        marginBottom: '15px'
     }
 }
 
@@ -164,10 +159,17 @@ const Home = () => {
                     </Card>
                 </Col>
             </Row>
-            <div style={{textAlign: 'center'}}>
-                <Link to="/dashboard">
-                <Button icon={<TwitterOutlined />} size="large" type="primary" style={styles.liveBtn}>Live Covid Data</Button>
-                </Link>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{display:'inline', marginRight: '5%'}}>
+                    <Link to="/dashboard">
+                    <Button icon={<TwitterOutlined />} size="large" type="primary" style={{width:'45%', marginBottom: '15px'}}>Live Covid Data</Button>
+                    </Link>
+                </div>
+                <div style={{display:'inline'}}>
+                    <Link to="/resources">
+                    <Button icon={<LinkOutlined />} size="large" type="primary" style={{width:'45%', marginBottom: '15px'}}>Other Resources</Button>
+                    </Link>
+                </div>
             </div>
             <p style={{marginBottom: '10px', background: '#fff3cd', padding: '10px', outline: '1px solid #ffcc00'}}>
             <b>Note: </b>Please ensure you are in compliance with Government of India, state governments in India and local law enforcement authority rules and regulations when using Leads/Suppliers from this site; or providing a Lead/Supply on this site.

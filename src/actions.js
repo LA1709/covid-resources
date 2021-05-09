@@ -18,6 +18,14 @@ export const getUnverified = (update) => {
     })
 }
 
+export const getPics = (update) => {
+    const d = new Date();
+    database.ref(`instascraper/data/${d.toISOString().slice(0,10)}/checked`)
+    .once('value').then(snapshot => {
+        if(snapshot.exists()) update(snapshot.val())
+    })
+}
+
 export const setUserLogin = (name, email) => {
     const dbRef = database.ref(`volunteers/users/${email.replace(/\./g, "")}`);
     dbRef.once('value').then(ss => {

@@ -5,7 +5,7 @@ const { TabPane } = Tabs;
 
 const Resources = ({ resources }) => {
     return (
-        <Tabs defaultActiveKey="1">
+        <Tabs defaultActiveKey="0">
             {
                 resources && resources.map((item, idx) => (
                     // Since array indices start from 0 and tab panes from 1 so I added 1 to the key

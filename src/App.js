@@ -57,10 +57,11 @@ const App = () => {
       </Drawer>
       <Layout>
         <Header>
-          {!visible && 
-            <Button type="primary" onClick={()=>setVisible(true)}>
-              <MenuUnfoldOutlined />
-            </Button>
+          {!visible &&
+            <MenuUnfoldOutlined
+              style={{color: "white", fontSize:"1.6em", marginLeft: "1em", border: "2px solid white", padding: "5px", borderRadius: "2px"}} 
+              onClick={()=>setVisible(true)}
+            />
           }
         </Header>
         <Content style={{ padding: '0 2%'}}>

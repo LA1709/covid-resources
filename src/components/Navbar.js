@@ -17,7 +17,7 @@ const Navbar = () => {
             <Link to="/dashboard">Live</Link>
           </Menu.Item>
           <Menu.Item key="/resources" style={{fontSize: '16px'}}>
-            <Link to="/resources">Links</Link>
+            <Link to="/resources">Other Resources</Link>
           </Menu.Item>
           <Menu.Item key="/about" style={{fontSize: '16px'}}>
             <Link to="/about">About</Link>
