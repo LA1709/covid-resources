@@ -3,6 +3,7 @@ import { Form, AutoComplete, Select, Button, Card, Alert, List, Modal, Spin } fr
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { states } from './states';
 import { Link } from 'react-router-dom';
+import DetailsCard from './components/DetailsCard';
 const { Option } = Select;
 
 const styles= {
@@ -96,11 +97,6 @@ function getSortedLeads(leadsJsonObject) {
     });
 
     return sortedLeadsObject;
-}
-
-const checkDetails = (item) => {
-    if ((item.desc||item.area) && (item.desc!="")) return false;
-    else return true
 }
 
 const Seeker = ({queries}) => {
@@ -218,29 +214,25 @@ const Seeker = ({queries}) => {
                         <div key={cat}>
                             <h3 style={styles.subheading}>{cat.toUpperCase()}</h3>
                             <List
-                                grid={{gutter: 16, xs: 2, sm: 3, md: 4, lg: 5}}
+                                grid={{gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 6}}
                                 dataSource={Object.entries(getSortedLeads(result[region][cat]))}
                                 renderItem={item => (
                                 <List.Item>
-                                    <Card key={item[0]} style={{borderRadius: '4px'}}>
-                                        <div><b>NAME: </b>{item[1].name}</div>
-                                        <div><b>PHONE: </b>
-                                        <a href={`tel:+91${item[0]}`}>{item[0]}</a><br />
-                                        <div><b>Last Verified: </b>{item[1].verified?getDateTimeDifference(item[1].verified):item[1].date+' at '+item[1].time}</div>
-                                        <center>
-                                        <div style={{display: 'inline', marginRight: '4px'}}>
-                                            <Button type="primary" disabled={checkDetails(item[1])} onClick={()=>{setDetails(item[1])}}>
-                                                Details
-                                            </Button>
-                                        </div>
-                                        <div style={{display: 'inline'}}>
-                                        <a target="blank" href={`https://api.whatsapp.com/send?phone=+91${item[0]}`}>
-                                            <Button type="primary">Message</Button>
-                                        </a>
-                                        </div>
-                                        </center>
-                                        </div>
-                                    </Card>
+                                    <DetailsCard 
+                                        key={item[0].trim()} 
+                                        name={item[1].name} 
+                                        isOrganisation={true} 
+                                        category={cat} 
+                                        location={region} 
+                                        phoneNumbers={[item[0]]} 
+                                        emailAddresses={null} 
+                                        verifiedAt={item[1].verified?getDateTimeDifference(item[1].verified):item[1].date+' at '+item[1].time} 
+                                        verifiedCount={null} 
+                                        contactLink={`https://api.whatsapp.com/send?phone=${
+                                            item[0].trim().match(/^\d{10}$/)?'91'+item[0].trim().match(/\d{10}/):""
+                                        }`} 
+                                        details={item[1].desc}
+                                    />
                                 </List.Item>
                                 )}
                             />

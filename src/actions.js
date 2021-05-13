@@ -38,6 +38,15 @@ export const getPics = (update) => {
     })
 }
 
+export const getData = (categ, update, date) => {
+    const d = date?date:new Date();
+    const dbRef = database.ref(`data/${"oxygen-cylinder"}/${d.toISOString().slice(0,10)}/`);
+    dbRef.once('value').then(snapshot => {
+        if (snapshot.exists()) update(snapshot.val())
+        else update({})
+    })
+}
+
 export const setUserLogin = (name, email) => {
     const dbRef = database.ref(`volunteers/users/${email.replace(/\./g, "")}`);
     dbRef.once('value').then(ss => {
@@ -54,9 +63,7 @@ export const addData = (arr) => {
         const st = lead['State'].toLowerCase()//.replace(/\/|\./g, "_");
         const cat = 'Remdesivir'//lead['Type of Help'].toLowerCase().replace(" ", "_");
         // if (!result[s]) result[s]={};
-        result [`${st}/${cat}/${lead['phone']}`] = {
-                ...lead
-            }
+        result[`${st}/${cat}/${lead['phone']}`] = {...lead}
     }
     })
     console.log({...result})

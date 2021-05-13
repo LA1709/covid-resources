@@ -1,7 +1,7 @@
 {
   "hosting": {
     "public": "build",
-    "site": "covid-resources",
+    "site": "india-one-help",
     "ignore": [
       "firebase.json",
       "**/.*",

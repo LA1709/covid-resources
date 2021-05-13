@@ -1,8 +1,9 @@
 import {useState, useEffect} from 'react';
 import { Layout, Drawer, Button } from 'antd';
-import { MenuUnfoldOutlined } from '@ant-design/icons';
 import { Route, Switch, BrowserRouter, Link } from 'react-router-dom';
+import { getHelpers, getUnverified, getLinks, getHelpAdmin, setUserLogin } from './actions';
 // import './App.css';
+import Menu from './assets/menu.png';
 import 'antd/dist/antd.css';
 import Home from './Home';
 import Contact from './Contact';
@@ -11,8 +12,8 @@ import Volunteer from './Volunteer';
 import Admin from './Admin';
 import Update from './Update';
 import Dashboard from './Dashboard'
-import { getHelpers, getUnverified, getLinks, getHelpAdmin, setUserLogin } from './actions';
 import Resources from './resources';
+import Help from './Help';
 import Navbar from './components/Navbar';
 import Login from './components/Login';
 import Logout from './components/Logout';
@@ -58,9 +59,8 @@ const App = () => {
       <Layout>
         <Header>
           {!visible &&
-            <MenuUnfoldOutlined
-              style={{color: "white", fontSize:"1.6em", marginLeft: "1em", border: "2px solid white", padding: "5px", borderRadius: "2px"}} 
-              onClick={()=>setVisible(true)}
+            <img src={Menu} width="35px" height="30px" onClick={()=>setVisible(true)} 
+              style={{cursor: 'pointer', marginLeft: '-30px'}} 
             />
           }
         </Header>
@@ -75,6 +75,7 @@ const App = () => {
             <Route path="/seeker">
                 <Seeker queries={help}/>
             </Route>
+            <Route path="/help/:category" render={(props) => <Help category={props.match.params.category} />} />
             <Route path="/volunteer">
                 <Volunteer />
             </Route>
