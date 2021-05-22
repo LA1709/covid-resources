@@ -45,7 +45,7 @@ const styles= {
     },
     ctabtn : {
         width: '60%', 
-        height: '60px', 
+        minHeight: '60px', 
         fontSize: '1.7em',
         display: 'inline'
     }

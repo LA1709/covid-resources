@@ -40,7 +40,8 @@ export const getPics = (update) => {
 
 export const getData = (categ, update, date) => {
     const d = date?date:new Date();
-    const dbRef = database.ref(`data/${"oxygen-cylinder"}/${d.toISOString().slice(0,10)}/`);
+    const t = d.toISOString().slice(0,10);
+    const dbRef = database.ref(`data/${"oxygen-cylinder"}/${"2021-05-13"}/`);
     dbRef.once('value').then(snapshot => {
         if (snapshot.exists()) update(snapshot.val())
         else update({})
@@ -51,7 +52,6 @@ export const setUserLogin = (name, email) => {
     const dbRef = database.ref(`volunteers/users/${email.replace(/\./g, "")}`);
     dbRef.once('value').then(ss => {
         if(!ss.exists()) dbRef.set({name: name, email: email, access_level: 1})
-        else console.log("Exists")
     })
 }
 
@@ -117,12 +117,14 @@ export const exhausted = (item, toggle, refresh, desc) => {
 
 export const addHelp = (data, report) => {
     const email = localStorage.getItem('email');
-    const child = email?data.verified?'help':'unverified':'unverified';
-    const dbRef = database.ref(`${child}/${data.region}/${data.category}/${data.phone}`);
+    const d = new Date();
+    const child = email?data.verified?'data':'unverified':'unverified';
+    const dbRef = database.ref(`${child}/${data.category}/${d.toISOString().slice(0,10)}/${data.phone}`);
     const obj = {};
     ['desc', 'area', 'name', 'verified'].forEach(key => {
         if (data[key]) obj[key] = data[key]
     })
+    //Make call to Places API
     dbRef.once('value').then(ss => {
         if (ss.exists() && !data.verified) report("707");
         else dbRef.update(obj).then(s => report("200"));

@@ -1,54 +1,14 @@
 import { useState } from 'react';
 import { Card } from 'antd';
 import { useHistory } from "react-router-dom";
+import categories from '../utils/categories';
 
-import Oxygen from '../assets/OXYGEN.png';
-import Ambulance from '../assets/AMBULANCE.png';
-import Home from '../assets/HOME.png';
-import Online from '../assets/ONLINE.png';
-import Hospital from '../assets/HOSPITAL.png';
-import Medicines from '../assets/MEDICINE.png';
-
-
-const categories = {
-    'oxygen': {
-        image: Oxygen,
-        data: [
-            'cylinder',
-            'cans',
-            'concentrators',
-            'langar',
-            'refill'
-        ]
-    },
-    'ambulance': { image: Ambulance, data: ['services'] },
-    'home': { image: Home, data: ['ICU'] },
-    'online': {
-        image: Online,
-        data: [
-            'consultation',
-            'counselling'
-        ]
-    },
-    'hospital': { image: Hospital, data: ['beds'] },
-    'medicines': {
-        image: Medicines,
-        data: [
-            'all',
-            'tocilizumab',
-            'remdesivir',
-            'fabiflu',
-            'other'
-        ]
-    },
-
-}
 
 const styles = {
-    gridStyle: {
-        width: '45%',
+    gridCardStyle: {
+        width: '100%',
         maxWidth: '230px',
-        height: '180px',
+        height: '160px',
         textAlign: 'center',
         cursor: 'pointer',
         margin: '2.5%'
@@ -114,12 +74,9 @@ const Categories = () => {
             )
                 :
                 Object.keys(categories).map(categ =>
-                    <Card.Grid key={categ} style={styles.gridStyle} id={categ} onClick={handleClick}>
+                    <Card.Grid key={categ} style={styles.gridCardStyle} id={categ} onClick={handleClick}>
                         <img src={categories[categ].image} style={styles.icon} alt={categ} /><br />
-                        {categories[categ].data.length > 1 ?
-                            categ.toUpperCase() :
-                            `${categ.toUpperCase()} ${categories[categ].data[0].toUpperCase()}`
-                        }
+                        {categories[categ].label.toUpperCase()}
                     </Card.Grid>
                 )
             }
