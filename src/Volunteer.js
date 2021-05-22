@@ -4,6 +4,9 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import { states } from './states';
 import { Link } from 'react-router-dom';
 import { addHelp } from './actions';
+
+import categories from './utils/categories';
+
 const { Option } = Select;
 
 const styles= {
@@ -21,9 +24,17 @@ const styles= {
         top: '5px'
         // left: '3%'
     }
-}
+};
 
-const options = ['Oxygen', 'Remdesivir', 'Plasma', 'Beds', 'Other Medicines', 'Food', 'Tocilizumab', 'Ambulance'];
+const getCategories = () => {
+    let result = [];
+    Object.keys(categories).forEach(key => {
+        categories[key].data.map(val => {
+            result.push(`${key.toUpperCase()}-${val}`)
+        })
+    });
+    return result
+}
 
 const Volunteer = () => {
 
@@ -112,7 +123,7 @@ const Volunteer = () => {
                         rules={[{ required: true, message: 'Please select a category' }]}
                     >
                         <Select placeholder="Select a Category">
-                        {options.map(opt => <Option key={opt} value={opt.toLowerCase()}>{opt}</Option>)}
+                        {getCategories().map(opt => <Option key={opt} value={opt.toLowerCase()}>{opt}</Option>)}
                         </Select>
                     </Form.Item>
                     <Form.Item

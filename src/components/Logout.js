@@ -5,13 +5,13 @@ import { useHistory } from "react-router-dom";
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const googleStyle={
   cta : {
-      width: '90%',
+      width: '100%',
       maxWidth: '600px',
-      marginBottom: '40px'
+      marginBottom: '20px'
   },
 }
 
-function Logout() {
+function Logout({ name }) {
   let history = useHistory();
 
   const onSuccess = () => {
@@ -25,11 +25,12 @@ function Logout() {
 
   return (
     <div>
+      {name&&<span style={{marginRight: '10px'}}>Hi, {name}</span>}
       <GoogleLogout style={googleStyle.cta}
         clientId={clientId}
         buttonText="Logout"
         onLogoutSuccess={onSuccess}
-      ></GoogleLogout>
+      />
     </div>
   );
 }
